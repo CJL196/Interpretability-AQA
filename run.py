@@ -5,7 +5,7 @@ import logging
 from utils.utils import log_and_print
 from utils.vis import *
 from loss import attention_loss, cal_spearmanr_rl2
-from methods.weight_methods import NashMTL
+# from methods.weight_methods import NashMTL
 import matplotlib.pyplot as plt
 def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,splits=["train","test"]):
     backbone, neck, head = network
@@ -50,7 +50,7 @@ def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,
                     
                     
                     if "feats" in data:
-                        clip_feats = data["feats"].cuda()
+                        clip_feats = data["feats"].cuda()  # (B, L, D)
                     else:
                         bs, frame, feats  = video.shape
                         video = video.reshape(video.shape[0],3,48,16,224,224).cuda()

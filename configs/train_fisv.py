@@ -1,6 +1,6 @@
 
 seed = 999
-multi_gpu = "1"
+multi_gpu = "0"
 
 # dataset config (logo, gym, fisv)
 dataset_name = "fisv"
@@ -9,7 +9,7 @@ dataset_name = "fisv"
 # presave =  "/mnt/welles/scratch/datasets/condor/backup/logo/logo_feats"
 
 
-fisv_dir = "/mnt/welles/scratch/datasets/condor/data/fis-v"
+fisv_dir = "./fis-v"
 label = "TES" #PCS
 
 # dataloader config
@@ -25,7 +25,7 @@ i3d = dict(
     backbone="I3D",
     neck="",
     evaluator="",
-    I3D_ckpt_path="/home/xu/repo/CoRe/MTL-AQA/model_rgb.pth" 
+    I3D_ckpt_path="model_rgb.pth" 
 )
 
 vivit = dict(

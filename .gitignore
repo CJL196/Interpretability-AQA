@@ -27,3 +27,4 @@ poetry.lock
 Thumbs.db
 
 ckpts/*.pt
+draft*

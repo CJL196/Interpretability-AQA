@@ -4,7 +4,7 @@ import random
 import logging
 import numpy as np
 import argparse
-from mmcv import Config
+from mmengine.config import Config
 def get_logger(filepath, log_info):
     logger = logging.getLogger(filepath)
     logger.setLevel(logging.INFO)
