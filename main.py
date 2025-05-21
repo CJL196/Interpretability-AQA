@@ -22,7 +22,7 @@ def main(cfg):
     backbone = build_backbone(cfg)
     neck = build_neck(cfg)
     head = build_head(cfg)
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     if multi_gpu:
         backbone = nn.DataParallel(backbone)
         head = nn.DataParallel(head)
@@ -30,7 +30,7 @@ def main(cfg):
         
     if cfg.get('load_from', None) and os.path.exists(cfg.load_from):        
         neck.load_state_dict(torch.load(cfg.load_from)["neck"],strict=False)
-        head.load_state_dict(torch.load(cfg.load_from)["evaluator"],strict=False)
+        head.load_state_dict(torch.load(cfg.load_from)["head"],strict=False)
     
     # loss function
     mse = nn.MSELoss()

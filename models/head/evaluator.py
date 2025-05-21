@@ -22,7 +22,19 @@ class Evaluator_weighted(nn.Module):
         x_weight = torch.relu(self.layer1_weight(x))
         x_weight= torch.relu(self.layer2_weight(x_weight))
         x_weight = self.softmax(self.layer3_weight(x_weight))
+        
+        # plot_score(x_weight.squeeze(-1)[0].cpu(), 'weight')
+        # plot_score(x_mean.squeeze(-1)[0].cpu(), 'mean')
             
         logits = torch.sum(x_mean.squeeze(-1) * x_weight.squeeze(-1),axis=1)
         
         return logits, x_weight, x_mean, None
+
+def plot_score(y:torch.Tensor, name:str):
+    import matplotlib.pyplot as plt
+    # y.shape = (L,)
+    l = y.shape[0]
+    y = y.detach().numpy()
+    plt.plot(range(l), y)
+    plt.savefig(f'{name}.png')
+    plt.close()

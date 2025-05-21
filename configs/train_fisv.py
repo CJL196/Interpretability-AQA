@@ -51,5 +51,5 @@ num_layers = 2
 # training config
 split_feats = True
 epoch_num = 1000
-# load_from = "/mnt/fast/nobackup/scratch4weeks/xd00101/detr-aqa-hinge/ckpts/logo_i3d_05drop_decoder_2layers_decoupled_20query_softmaxweight_augment_100score_tpti3d_warmup_onlyscore_seed199771_uncertainty_6layers1.pt"
+# load_from = "ckpts/i3d_fisv_999_TES_True_5_query_pe_2.pt"
 lr = 1e-4

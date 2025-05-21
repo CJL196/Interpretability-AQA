@@ -5,6 +5,7 @@ import logging
 from utils.utils import log_and_print
 from utils.vis import *
 from loss import attention_loss, cal_spearmanr_rl2
+from torch.utils.tensorboard import SummaryWriter
 # from methods.weight_methods import NashMTL
 import matplotlib.pyplot as plt
 def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,splits=["train","test"]):
@@ -23,6 +24,8 @@ def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,
     if test_only:
         cfg.epoch_num = 400
 
+    writer = SummaryWriter(log_dir='runs/0521-pcs')
+    
     for epoch in range(cfg.epoch_num):
         for split in splits:
             true_scores = []
@@ -44,6 +47,7 @@ def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,
             losses = 0
             for data_ in data_loaders[split]:
                 data, clip_info = data_
+                # print(f'clip_info: {clip_info}')
                 score = data["score"].float().cuda()
                 video = data["video"]
                 if cfg.split_feats:
@@ -95,6 +99,7 @@ def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,
                     
             # show information
             log_and_print(base_logger, f'Epoch: {epoch}, {split} correlation: {rho}, best: {rho_best}')
+            writer.add_scalar(f'{split}/correlation', rho, epoch)
             
             if rho > rho_best and split == "test":
                 rho_best = rho

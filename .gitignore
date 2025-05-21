@@ -28,3 +28,5 @@ Thumbs.db
 
 ckpts/*.pt
 draft*
+runs
+exp
