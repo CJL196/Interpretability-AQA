@@ -44,7 +44,7 @@ att_loss = True
 dino_loss = True
 max_len = 136
 
-num_layers = 2
+num_layers = 1
 
 
 

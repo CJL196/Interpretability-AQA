@@ -32,7 +32,7 @@ def build_head(cfg):
     # from models.head.evaluator import Evaluator_weighted
     # return Evaluator_weighted().cuda()
     from models.head.gdlt import GDLT
-    return GDLT(d_model=1024, nhead=1, dim_feedforward=2048, dropout=0.1, num_decoder_layers=2, n_query=4).cuda()
+    return GDLT(d_model=1024, nhead=1, dim_feedforward=2048, dropout=0.1, num_decoder_layers=1, n_query=4).cuda()
     
     
 
