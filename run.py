@@ -25,7 +25,7 @@ def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,
     if test_only:
         cfg.epoch_num = 400
 
-    writer = SummaryWriter(log_dir='runs/0521-pcs')
+    writer = SummaryWriter(log_dir=f'runs/0522-2/{cfg.label}')
     
     for epoch in range(cfg.epoch_num):
         for split in splits:
@@ -68,6 +68,8 @@ def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,
                 
                 tgt_weight, graph_attn = neck(clip_feats,train=False) # tgt_weight.shape = (B, L, D)
                 # probs, weight, means, var = head(tgt_weight) # probs.shape = (B,)
+                clip_feats = clip_feats.to(tgt_weight.dtype)
+                tgt_weight = tgt_weight + clip_feats # 残差连接
                 out = head(tgt_weight)
                 probs = out['output']
                 loss_head, mse, triplet = get_gdlt_loss(probs, score, out['embed'])
