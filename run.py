@@ -6,6 +6,7 @@ from utils.utils import log_and_print
 from utils.vis import *
 from loss import attention_loss, cal_spearmanr_rl2
 from torch.utils.tensorboard import SummaryWriter
+from models.head.gdlt import get_gdlt_loss
 # from methods.weight_methods import NashMTL
 import matplotlib.pyplot as plt
 def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,splits=["train","test"]):
@@ -65,8 +66,11 @@ def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,
                     bs, frame, h, w  = video.shape
                     clip_feats = backbone(video)[1].squeeze(-1).squeeze(-1).permute(0,2,1)
                 
-                tgt_weight, graph_attn = neck(clip_feats,train=False)#split=="train")
-                probs, weight, means, var = head(tgt_weight)
+                tgt_weight, graph_attn = neck(clip_feats,train=False) # tgt_weight.shape = (B, L, D)
+                # probs, weight, means, var = head(tgt_weight) # probs.shape = (B,)
+                out = head(tgt_weight)
+                probs = out['output']
+                loss_head, mse, triplet = get_gdlt_loss(probs, score, out['embed'])
                 
                 pred_scores.extend([i.item() for i in probs])
                 true_scores.extend(score.cpu().numpy())
@@ -78,13 +82,13 @@ def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,
              
                 
                 
-                if cfg.dino_loss:
-                    probs = probs + torch.randn_like(probs).normal_(mean=0.0, std=0.05) #
-                mes_loss = mse(probs,score)
+                # if cfg.dino_loss:
+                #     probs = probs + torch.randn_like(probs).normal_(mean=0.0, std=0.05) #
+                # mes_loss = mse(probs,score)
                 if cfg.att_loss:
-                        loss = mes_loss + kld_loss
+                    loss = loss_head + kld_loss
                 else:
-                    loss = mes_loss
+                    loss = loss_head
           
                 losses += loss
                 rho, p, rl2 = cal_spearmanr_rl2(pred_scores, true_scores)
