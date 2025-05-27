@@ -68,8 +68,8 @@ def run(cfg, base_logger, network, data_loaders, kld, mse, optimizer, scheduler,
                 
                 tgt_weight, graph_attn = neck(clip_feats,train=False) # tgt_weight.shape = (B, L, D)
                 # probs, weight, means, var = head(tgt_weight) # probs.shape = (B,)
-                clip_feats = clip_feats.to(tgt_weight.dtype)
-                tgt_weight = tgt_weight + clip_feats # 残差连接
+                # clip_feats = clip_feats.to(tgt_weight.dtype)
+                # tgt_weight = tgt_weight + clip_feats # 残差连接
                 out = head(tgt_weight)
                 probs = out['output']
                 loss_head, mse, triplet = get_gdlt_loss(probs, score, out['embed'])
