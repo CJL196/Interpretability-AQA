@@ -10,7 +10,7 @@ dataset_name = "fisv"
 
 
 fisv_dir = "./fis-v"
-label = "TES" #PCS
+label = "PCS" #PCS
 
 # dataloader config
 subset = 0
